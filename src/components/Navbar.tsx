@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from '@/lib/store';
 import useDebounce from '@/hooks/useDebounce';
 import useAuth from '@/hooks/useAuth';
 import { logoutAsync } from '@/lib/features/authSlice';
+import usePrefetch from '@/hooks/usePrefetch';
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +17,7 @@ const Navbar = () => {
   const { searchQuery, searchResults, loading } = useSelector((state: RootState) => state.blog);
   const [inputValue, setInputValue] = useState(searchQuery);
   const debouncedQuery = useDebounce(inputValue, 300);
+  const prefetchPage = usePrefetch();
 
   useEffect(() => {
     dispatch(setSearchQuery(inputValue));
@@ -51,6 +53,10 @@ const Navbar = () => {
     setInputValue("");
     router.push(`/blog/posts/${id}`);
   };
+
+  const handleResultHover = (id: string) => {
+    prefetchPage(`/blog/posts/${id}`)
+  }
 
   if(loading) {
     return (
@@ -93,6 +99,7 @@ const Navbar = () => {
             <li 
               key={blog.id} 
               onClick={() => handleResultClick(blog.id)}
+              onMouseEnter={() => handleResultHover(blog.id)}
               className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
             >
               <h3 className="text-lg font-semibold">{blog.title}</h3>
