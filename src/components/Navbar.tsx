@@ -43,10 +43,12 @@ const Navbar = () => {
   };
 
   const handleCreatePost = () => {
+    setInputValue("");
     router.push('/blog/create');
   };
 
   const handleResultClick = (id: string) => {
+    setInputValue("");
     router.push(`/blog/posts/${id}`);
   };
 
@@ -57,28 +59,44 @@ const Navbar = () => {
   }
 
   return (
-    <nav>
-      <input
-        type="text"
-        placeholder="Search blogs..."
-        name='search'
-        id='search'
-        value={inputValue}
-        onChange={handleSearchChange}
-      />
-      <button onClick={handleLoginLogout}>
-        {isAuthenticated ? 'Logout' : 'Login'}
-      </button>
-      {isAuthenticated && (
-        <button onClick={handleCreatePost}>Create Post</button>
-      )}
-      {loading && <p>Loading...</p>}
-      {searchResults.length > 0 && (
-        <ul>
+    <nav className="bg-gray-800 p-4 flex items-center justify-between">
+      <div className="flex-1">
+        <input
+          type="text"
+          placeholder="Search blogs..."
+          name='search'
+          id='search'
+          value={inputValue}
+          onChange={handleSearchChange}
+          className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="flex space-x-4">
+        <button 
+          onClick={handleLoginLogout}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        >
+          {isAuthenticated ? 'Logout' : 'Login'}
+        </button>
+        {isAuthenticated && (
+          <button 
+            onClick={handleCreatePost}
+            className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+          >
+            Create Post
+          </button>
+        )}
+      </div>
+      {searchResults.length > 0 && inputValue.length && (
+        <ul className="absolute top-[50px] bg-white shadow-lg mt-2 p-4 border border-gray-200 rounded-md w-full max-w-md">
           {searchResults.map((blog) => (
-            <li key={blog.id} onClick={() => handleResultClick(blog.id)}>
-              <h3>{blog.title}</h3>
-              <p>{blog.author}</p>
+            <li 
+              key={blog.id} 
+              onClick={() => handleResultClick(blog.id)}
+              className="cursor-pointer p-2 hover:bg-gray-100 rounded-md"
+            >
+              <h3 className="text-lg font-semibold">{blog.title}</h3>
+              <p className="text-gray-600">{blog.author}</p>
             </li>
           ))}
         </ul>

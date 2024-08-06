@@ -31,6 +31,7 @@ const useAuth = () => {
           throw new Error('An error occurred');
         }
       } catch (err) {
+        setLoading(false);
         console.error(err);
         dispatch(logoutSuccess());
       } finally {

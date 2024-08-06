@@ -6,7 +6,9 @@ export async function POST(req: Request) {
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value || "";
 
-  if (!token) {
+  console.log("Token:", token);
+
+  if (token == "") {
     return NextResponse.json({ message: "No token provided" }, { status: 400 });
   }
 
