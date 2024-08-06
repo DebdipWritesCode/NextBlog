@@ -6,11 +6,12 @@ import { useRouter } from 'next/navigation';
 import { searchBlogs, setSearchQuery } from '@/lib/features/blogSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import useDebounce from '@/hooks/useDebounce';
+import useAuth from '@/hooks/useAuth';
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated } = useAuth();
   const { searchQuery, searchResults, loading } = useSelector((state: RootState) => state.blog);
   const [inputValue, setInputValue] = useState(searchQuery);
   const debouncedQuery = useDebounce(inputValue, 300);
@@ -29,7 +30,7 @@ const Navbar = () => {
 
   const handleLoginLogout = () => {
     if (isAuthenticated) {
-      // Handle logout
+      //TODO handle logout
     } else {
       router.push('/login');
     }
@@ -42,6 +43,12 @@ const Navbar = () => {
   const handleResultClick = (id: string) => {
     router.push(`/blogs/${id}`);
   };
+
+  if(loading) {
+    return (
+      null
+    )
+  }
 
   return (
     <nav>

@@ -22,7 +22,7 @@ const initialState: BlogState = {
   blogs: [],
   searchQuery: "",
   searchResults: [],
-  loading: false,
+  loading: true,
   error: null,
 };
 

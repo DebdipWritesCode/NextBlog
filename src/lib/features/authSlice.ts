@@ -17,13 +17,13 @@ const initialState: AuthState = {
 
 export const verifyTokenAsync = createAsyncThunk<
   { id: string; username: string }, // fulfilled type
-  string, // argument type
+  void, // argument type
   { rejectValue: string } // reject type
 >(
   "auth/verifyToken",
-  async (token: string, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/auth/verify", { token });
+      const response = await axios.post("/api/auth/verify");
       return response.data.decoded;
     } catch (err) {
       return rejectWithValue("Invalid token");
