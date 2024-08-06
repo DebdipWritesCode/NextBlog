@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "@/lib/features/authSlice";
 
 type LoginData = {
   username: string;
@@ -13,6 +16,9 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   async function handleLoginSubmit(e: React.FormEvent) {
     e.preventDefault();
     const data: LoginData = {
@@ -21,7 +27,12 @@ const LoginPage = () => {
     }
     try {
       const response = await axios.post("/api/auth/login", data);
-      console.log(response.data);
+      if(response.status === 200) {
+        setError("");
+        console.log(response.data);
+        dispatch(loginSuccess(response.data.user))
+        router.push("/");
+      }
     }
     catch(err) {
       if(axios.isAxiosError(err) && err.response) {
