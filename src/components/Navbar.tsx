@@ -7,6 +7,7 @@ import { searchBlogs, setSearchQuery } from '@/lib/features/blogSlice';
 import { AppDispatch, RootState } from '@/lib/store';
 import useDebounce from '@/hooks/useDebounce';
 import useAuth from '@/hooks/useAuth';
+import { logoutAsync } from '@/lib/features/authSlice';
 
 const Navbar = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,9 +29,14 @@ const Navbar = () => {
     setInputValue(e.target.value);
   };
 
-  const handleLoginLogout = () => {
+  const handleLoginLogout = async () => {
     if (isAuthenticated) {
-      //TODO handle logout
+      try {
+        await dispatch(logoutAsync()).unwrap();
+        router.push('/');
+      } catch (error) {
+        console.error('Logout failed', error);
+      }
     } else {
       router.push('/login');
     }

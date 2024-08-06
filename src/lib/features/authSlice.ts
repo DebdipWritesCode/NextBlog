@@ -19,17 +19,26 @@ export const verifyTokenAsync = createAsyncThunk<
   { id: string; username: string }, // fulfilled type
   void, // argument type
   { rejectValue: string } // reject type
->(
-  "auth/verifyToken",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.post("/api/auth/verify");
-      return response.data.decoded;
-    } catch (err) {
-      return rejectWithValue("Invalid token");
-    }
+>("auth/verifyToken", async (_, { rejectWithValue }) => {
+  try {
+    const response = await axios.post("/api/auth/verify");
+    return response.data.decoded;
+  } catch (err) {
+    return rejectWithValue("Invalid token");
   }
-);
+});
+
+export const logoutAsync = createAsyncThunk<
+  void, // fulfilled type
+  void, // argument type
+  { rejectValue: string } // reject type
+>("auth/logout", async (_, { rejectWithValue }) => {
+  try {
+    await axios.post("/api/auth/logout");
+  } catch (err) {
+    return rejectWithValue("Failed to logout");
+  }
+});
 
 const authSlice = createSlice({
   name: "auth",
@@ -43,7 +52,7 @@ const authSlice = createSlice({
       const newUUser = {
         id: action.payload.id,
         username: action.payload.username,
-      }
+      };
       state.user = newUUser;
     },
     logoutSuccess: (state) => {
@@ -65,13 +74,23 @@ const authSlice = createSlice({
           state.loading = false;
         }
       )
-      .addCase(
-        verifyTokenAsync.rejected,
-        (state, action) => {
-          state.loading = false;
-          state.error = action.payload as string;
-        }
-      );
+      .addCase(verifyTokenAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(logoutAsync.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutAsync.fulfilled, (state) => {
+        state.isAuthenticated = false;
+        state.user = null;
+        state.loading = false;
+      })
+      .addCase(logoutAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
