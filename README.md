@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next Blog Application
+
+This Next.js 14 project is a simple blog-post application that allows users to view and post blogs. The application follows a component-based architecture and uses Redux Toolkit with RTK Query for global state management and data fetching.
 
 ## Getting Started
 
@@ -16,21 +18,36 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Login Page**: Users can log in with the username "user" and password "banao".
+- **Blog Listing Page**: View and search for blogs by title. This page is server-side rendered with authentication token validation.
+- **Create New Blog**: Access the "Create New" button to navigate to the post blog screen.
+- **Post Blog Screen**: Allows users to create and post new blogs.
 
-## Learn More
+## Optimization Techniques
 
-To learn more about Next.js, take a look at the following resources:
+1. **Image Optimization**: Utilizes the Next.js `Image` component for efficient image compression and lazy loading.
+2. **Code Splitting**: Implemented prefetching on hover and both route-based and component-based code splitting.
+3. **Debouncing**: Custom `useDebounce` hook with a 300 ms delay to optimize API calls for search input.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Integration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Uses dummy data for blogs and login functionality.
+- APIs are managed in the `api` folder using Next.js' API routes.
+- For testing, the login credentials are:
+  - Username: `user`
+  - Password: `banao`
 
-## Deploy on Vercel
+## Component-Based Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Server and client components are split appropriately.
+- Styled using CSS modules with a basic design system.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## SEO Considerations
+
+- Basic SEO practices are applied to ensure visibility and search engine ranking.
+
+## UI Reference
+
+For design and UI elements, refer to the Figma design system: [UI Reference](https://www.figma.com/design/HM2uZF7oXVgKCcm0dqlYf1/References?node-id=0-1&t=bC4D4arlWvHp6mk7-0)
