@@ -12,7 +12,7 @@ const BlogListPage = () => {
 
   useEffect(() => {
     dispatch(fetchBlogs());
-  }, [dispatch]);
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;

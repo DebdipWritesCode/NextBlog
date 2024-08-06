@@ -31,7 +31,7 @@ const LoginPage = () => {
         setError("");
         console.log(response.data);
         dispatch(loginSuccess(response.data.user))
-        router.push("/");
+        router.push("/blog");
       }
     }
     catch(err) {
