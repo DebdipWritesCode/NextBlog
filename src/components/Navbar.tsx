@@ -37,11 +37,11 @@ const Navbar = () => {
   };
 
   const handleCreatePost = () => {
-    router.push('/create-post');
+    router.push('/blog/create');
   };
 
   const handleResultClick = (id: string) => {
-    router.push(`/blogs/${id}`);
+    router.push(`/blog/posts/${id}`);
   };
 
   if(loading) {
@@ -55,6 +55,8 @@ const Navbar = () => {
       <input
         type="text"
         placeholder="Search blogs..."
+        name='search'
+        id='search'
         value={inputValue}
         onChange={handleSearchChange}
       />

@@ -1,26 +1,47 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../lib/store";
 import { verifyTokenAsync, loginSuccess, logoutSuccess } from "../lib/features/authSlice";
 
+type UserData = {
+  id: string;
+  username: string;
+}
+
 const useAuth = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { isAuthenticated, user, loading, error } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      dispatch(verifyTokenAsync())
-        .unwrap()
-        .then((userData) => {
+    const verifyToken = async () => {
+      try {
+        const responseData = await dispatch(verifyTokenAsync());
+        const decodedData = responseData.payload;
+        
+        if (typeof decodedData === 'object' && decodedData !== null) {
+          const userData: UserData = {
+            id: decodedData.id,
+            username: decodedData.username,
+          }
           dispatch(loginSuccess(userData));
-        })
-        .catch(() => {
-          dispatch(logoutSuccess());
-        });
-    }
-  }, [dispatch, isAuthenticated]);
+        } else if (typeof decodedData === 'string') {
+          throw new Error(decodedData);
+        } else {
+          throw new Error('An error occurred');
+        }
+      } catch (err) {
+        console.error(err);
+        dispatch(logoutSuccess());
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  return { isAuthenticated, user, loading, error };
+    verifyToken();
+  }, [dispatch]);
+
+  return { isAuthenticated, loading };
 };
 
 export default useAuth;
